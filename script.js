@@ -175,36 +175,47 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ---------- Player de vídeo ----------
+    // ---------- Player de vídeo (modal maior, com autoplay) ----------
     const videoContainer = document.getElementById('video-container');
-    const videoThumbnail = document.getElementById('video-thumbnail');
-    const videoIframe = document.getElementById('video-iframe');
+    const videoModal = document.getElementById('video-modal');
+    const videoModalIframe = document.getElementById('video-modal-iframe');
+    const videoModalClose = document.getElementById('video-modal-close');
 
-    if (videoContainer && videoThumbnail) {
-        const playVideo = () => {
+    if (videoContainer && videoModal && videoModalIframe) {
+        const openVideoModal = () => {
             if (!VIDEO_URL) {
                 console.warn('[Hektor] Defina VIDEO_URL em script.js para habilitar a demo em vídeo.');
                 return;
             }
 
-            if (videoIframe) {
-                videoIframe.src = VIDEO_URL;
-                videoIframe.classList.remove('hidden');
-            }
-
-            videoThumbnail.style.opacity = '0';
-            videoThumbnail.style.pointerEvents = 'none';
-            videoContainer.style.cursor = 'default';
-            videoContainer.removeAttribute('role');
-            videoContainer.removeAttribute('tabindex');
+            const separator = VIDEO_URL.includes('?') ? '&' : '?';
+            videoModalIframe.src = `${VIDEO_URL}${separator}autoplay=1`;
+            videoModal.classList.remove('hidden');
+            videoModal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
         };
 
-        videoContainer.addEventListener('click', playVideo);
+        const closeVideoModal = () => {
+            videoModal.classList.add('hidden');
+            videoModal.classList.remove('flex');
+            videoModalIframe.src = '';
+            document.body.style.overflow = '';
+        };
+
+        videoContainer.addEventListener('click', openVideoModal);
         videoContainer.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                playVideo();
+                openVideoModal();
             }
+        });
+
+        videoModalClose?.addEventListener('click', closeVideoModal);
+        videoModal.addEventListener('click', (e) => {
+            if (e.target === videoModal) closeVideoModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !videoModal.classList.contains('hidden')) closeVideoModal();
         });
     }
 });

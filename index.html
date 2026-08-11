@@ -318,9 +318,6 @@
                                 <span class="text-[10px] text-slate-400 dark:text-slate-500 font-mono">v1.0 Preview</span>
                             </div>
                         </div>
-                        
-                        <!-- Vídeo real: o src é definido no clique (VIDEO_URL em script.js) -->
-                        <iframe id="video-iframe" title="Demonstração do Hektor Vision" class="w-full h-full absolute inset-0 hidden" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 </div>
                 
@@ -333,6 +330,16 @@
             </div>
         </div>
     </section>
+
+    <!-- Video Modal (vídeo abre maior, em overlay, com autoplay) -->
+    <div id="video-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 backdrop-blur-sm p-4 md:p-12">
+        <button id="video-modal-close" aria-label="Fechar vídeo" class="absolute top-4 right-4 md:top-8 md:right-8 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors z-10">
+            <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <div class="relative w-full max-w-6xl aspect-video rounded-xl overflow-hidden shadow-2xl bg-black">
+            <iframe id="video-modal-iframe" title="Demonstração do Hektor Vision" class="w-full h-full absolute inset-0" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
 
     <!-- Social Proof (Minimalist) -->
     <section class="py-10 border-y border-slate-200 dark:border-brand-teal/8 bg-white dark:bg-dark-bg">
