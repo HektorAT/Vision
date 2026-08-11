@@ -1,0 +1,104 @@
+/* Base animations and utility classes */
+
+html {
+    scroll-padding-top: 5rem;
+}
+
+.reveal-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-left {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-up.active, .reveal-left.active {
+    opacity: 1;
+    transform: translate(0);
+}
+
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+
+/* Navbar glass effect on scroll */
+#navbar.scrolled {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.03);
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+
+
+/* FAQ: animação de altura com grid (0fr -> 1fr), sem precisar medir em JS */
+.faq-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease-out, opacity 0.3s ease-out;
+    opacity: 0;
+}
+
+.faq-content.active {
+    grid-template-rows: 1fr;
+    opacity: 1;
+}
+
+/* O filho precisa de overflow:hidden para o colapso funcionar */
+.faq-content > div {
+    overflow: hidden;
+}
+
+.faq-btn[aria-expanded="true"] i,
+.faq-btn[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+}
+
+/* Destaque do item aberto */
+.faq-item.is-open {
+    border-color: rgba(61, 207, 180, 0.4);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+
+
+/* NÃO redeclarar .hidden aqui: este arquivo é CSS sem @layer e sobrepõe as
+   utilities do Tailwind v4, o que quebrava `md:flex` (menu desktop invisível).
+   O Tailwind já fornece .hidden. */
+
+/* Respeita usuários que pedem menos movimento */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .reveal-up, .reveal-left {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Custom scrollbar for the app mockup */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 20px;
+}
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.2);
+}
