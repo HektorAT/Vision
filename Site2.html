@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hektor Vision | Monitoramento Inteligente</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS v4 via Browser -->
+<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style type="text/tailwindcss">
+@theme {
+--color-brand-primary: #111827;
+--color-brand-teal: #0D9488;
+--color-brand-teal-light: #14B8A6;
+--color-light-bg: #F8FAFC;
+--color-light-surface: #FFFFFF;
+--color-light-border: #E2E8F0;
+--font-sans: 'Inter', sans-serif;
+--font-mono: 'JetBrains Mono', monospace;
+}
+
+.grid-bg {
+background-size: 48px 48px;
+background-image:
+linear-gradient(to right, rgba(13, 148, 136, 0.04) 1px, transparent 1px),
+linear-gradient(to bottom, rgba(13, 148, 136, 0.04) 1px, transparent 1px);
+}
+
+#binary-canvas {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none;
+z-index: 1;
+opacity: 0;
+transition: opacity 0.8s ease;
+}
+#binary-canvas.active {
+opacity: 1;
+}
+
+.typing-cursor::after {
+content: '|';
+animation: blink 1s infinite;
+color: #0D9488;
+font-weight: bold;
+}
+@keyframes blink {
+0%, 100% { opacity: 1; }
+50% { opacity: 0; }
+}
+</style>
+</head>
+<body class="bg-light-bg text-slate-800 font-sans antialiased overflow-x-hidden selection:bg-brand-teal/20 selection:text-brand-teal">
+
+<!-- Canvas para o binário -->
+<canvas id="binary-canvas"></canvas>
+
+<!-- Botão flutuante -->
+<div class="fixed bottom-6 right-6 z-[9999]">
+<button id="toggle-binary" class="px-5 py-3 rounded-full bg-brand-teal text-white font-bold text-sm shadow-xl shadow-brand-teal/20 hover:bg-brand-teal-light hover:scale-105 transition-all flex items-center gap-2 cursor-pointer">
+<i data-lucide="binary" class="w-4 h-4"></i>
+<span>Antigravity Binário 🚀</span>
+</button>
+</div>
+
+<!-- Navbar -->
+<nav class="fixed w-full z-50 bg-light-bg/85 backdrop-blur-md border-b border-slate-200" id="navbar">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-20">
+<div class="flex items-center gap-3 relative z-10">
+<div class="w-9 h-9 rounded-xl bg-brand-teal/10 border border-brand-teal/30 flex items-center justify-center text-brand-teal font-extrabold shadow-sm">H</div>
+<span class="font-extrabold text-lg tracking-wider text-slate-900">HEKTOR<span class="text-brand-teal">.VISION</span></span>
+</div>
+<div class="hidden md:flex space-x-8 items-center relative z-10">
+<a href="#recursos" class="text-sm font-medium text-slate-600 hover:text-brand-teal transition-colors">Recursos</a>
+<a href="#video-section" class="text-sm font-medium text-slate-600 hover:text-brand-teal transition-colors">Demonstração</a>
+<a href="#galeria" class="text-sm font-medium text-slate-600 hover:text-brand-teal transition-colors">Galeria</a>
+<a href="#especificacoes" class="text-sm font-medium text-slate-600 hover:text-brand-teal transition-colors">Especificações</a>
+</div>
+<div class="relative z-10">
+<a href="#" class="px-5 py-2.5 rounded-full bg-brand-teal text-white text-sm font-bold shadow-md shadow-brand-teal/20 hover:bg-brand-teal-light transition-all">
+Solicitar Acesso
+</a>
+</div>
+</div>
+</div>
+</nav>
+
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center pt-28 pb-20 overflow-hidden">
+<div class="absolute inset-0 z-0 grid-bg"></div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center">
+<div class="max-w-4xl mx-auto">
+<div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-light-surface border border-slate-200 text-brand-teal text-xs font-semibold tracking-wider uppercase mb-8 shadow-sm">
+Hektor Vision 1.0 • Automação Inteligente
+</div>
+
+<h1 class="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-8 leading-[1.08]">
+Monitoramento de fábrica.<br>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-teal to-teal-600">Sem atrito. Em tempo real.</span>
+</h1>
+
+<p id="ai-typing-text" class="text-lg md:text-xl text-slate-600 mb-12 max-w-2xl mx-auto font-light min-h-[3.5rem] typing-cursor">
+Conectando diretamente aos seus PLCs Siemens...
+</p>
+
+<div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+<a href="#video-section" class="px-8 py-4 rounded-full bg-brand-teal text-white text-sm font-bold shadow-lg shadow-brand-teal/20 hover:bg-brand-teal-light transition-all flex items-center gap-2">
+Ver Vídeo ao Vivo
+<i data-lucide="play" class="w-4 h-4"></i>
+</a>
+<a href="#especificacoes" class="px-8 py-4 rounded-full bg-light-surface border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-semibold transition-all flex items-center gap-2 shadow-sm">
+<i data-lucide="cpu" class="w-4 h-4 text-brand-teal"></i>
+Ver Especificações
+</a>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Video Section (Play Manual com Thumbnail do YouTube) -->
+<section id="video-section" class="py-24 bg-light-surface relative z-10 border-t border-slate-200 text-center">
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl mx-auto mb-12">
+<span class="text-brand-teal text-xs font-bold tracking-widest uppercase bg-brand-teal/10 px-3 py-1 rounded-full">Experiência Imersiva</span>
+<h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mt-4 mb-4">Veja o Hektor Vision em ação</h2>
+<p class="text-slate-600 font-light">Clique para reproduzir o vídeo de demonstração oficial.</p>
+</div>
+
+<div class="relative rounded-3xl overflow-hidden border border-slate-200 shadow-2xl bg-slate-900 aspect-video flex items-center justify-center group">
+<!-- Thumbnail oficial gerada pelo YouTube do seu ID (2ua710GCYmE) -->
+<div id="video-poster" class="absolute inset-0 w-full h-full bg-cover bg-center cursor-pointer flex items-center justify-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('https://img.youtube.com/vi/2ua710GCYmE/maxresdefault.jpg');">
+<!-- Camada escura de contraste -->
+<div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] transition-colors group-hover:bg-slate-900/25"></div>
+
+<!-- Botão de Play Customizado -->
+<div class="relative z-10 w-20 h-20 rounded-full bg-brand-teal text-white flex items-center justify-center shadow-2xl shadow-brand-teal/50 group-hover:scale-110 transition-transform">
+<i data-lucide="play" class="w-8 h-8 fill-current ml-1"></i>
+</div>
+</div>
+
+<!-- Iframe do YouTube que só aparece ao clicar -->
+<div id="youtube-container" class="w-full h-full hidden">
+<iframe
+id="youtube-iframe"
+class="w-full h-full"
+src=""
+data-src="https://www.youtube-nocookie.com/embed/2ua710GCYmE?autoplay=1&rel=0"
+title="YouTube video player"
+frameborder="0"
+referrerpolicy="strict-origin-when-cross-origin"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen>
+</iframe>
+</div>
+
+<div id="video-badge" class="absolute top-4 left-4 bg-slate-900/80 backdrop-blur-md text-white text-xs font-mono px-3 py-1.5 rounded-lg border border-white/10 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-brand-teal animate-pulse"></span>
+<span>DEMO • PLC SIEMENS S7-1500</span>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Galeria -->
+<section id="galeria" class="py-24 bg-light-bg relative z-10 border-t border-slate-200">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center max-w-3xl mx-auto mb-16">
+<h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-4">Arquitetura e Interface</h2>
+<p class="text-slate-600 font-light">Projetado com foco em clareza operacional para engenheiros e técnicos.</p>
+</div>
+
+<div class="grid md:grid-cols-3 gap-8">
+<div class="group bg-white p-3 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
+<div class="overflow-hidden rounded-xl aspect-video bg-slate-100 mb-4">
+<img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80" alt="Painel Industrial" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+</div>
+<h3 class="font-bold text-slate-900 mb-1 px-2">Telemetria de Linha</h3>
+<p class="text-xs text-slate-500 px-2 font-light">Monitoramento simultâneo de múltiplos CLPs na mesma rede.</p>
+</div>
+<div class="group bg-white p-3 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
+<div class="overflow-hidden rounded-xl aspect-video bg-slate-100 mb-4">
+<img src="https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=800&q=80" alt="Engenharia e Software" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+</div>
+<h3 class="font-bold text-slate-900 mb-1 px-2">Estrutura TIA Portal</h3>
+<p class="text-xs text-slate-500 px-2 font-light">Sincronização limpa com blocos de dados otimizados.</p>
+</div>
+<div class="group bg-white p-3 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all">
+<div class="overflow-hidden rounded-xl aspect-video bg-slate-100 mb-4">
+<img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" alt="Painel Mobile" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+</div>
+<h3 class="font-bold text-slate-900 mb-1 px-2">Acesso Responsivo</h3>
+<p class="text-xs text-slate-500 px-2 font-light">Acompanhe métricas cruciais diretamente do seu dispositivo móvel.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Especificações -->
+<section id="especificacoes" class="py-24 bg-light-surface relative z-10 border-t border-slate-200">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid md:grid-cols-2 gap-16 items-center">
+<div>
+<h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-6">Arquitetura robusta para ambientes industriais.</h2>
+<p class="text-slate-600 text-base leading-relaxed font-light mb-8">Compatível nativamente com o ecossistema Siemens, integrando-se diretamente à rede da fábrica sem intermediários.</p>
+
+<ul class="space-y-4">
+<li class="flex items-center gap-3 text-slate-700">
+<i data-lucide="check-circle-2" class="w-5 h-5 text-brand-teal"></i>
+<span>Suporte TCP 102 para S7-300, 400, 1200 e 1500</span>
+</li>
+<li class="flex items-center gap-3 text-slate-700">
+<i data-lucide="check-circle-2" class="w-5 h-5 text-brand-teal"></i>
+<span>Importação rápida de símbolos via arquivo exportado</span>
+</li>
+</ul>
+</div>
+<div class="bg-light-bg p-6 rounded-2xl border border-slate-200 shadow-sm font-mono text-sm">
+<div class="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200">
+<div class="w-3 h-3 rounded-full bg-brand-teal/40"></div>
+<span class="text-xs text-slate-400">hektor-config.json</span>
+</div>
+<div class="text-slate-600 space-y-1.5">
+<div><span class="text-indigo-600">"protocol"</span>: <span class="text-teal-600">"Siemens_S7"</span>,</div>
+<div><span class="text-indigo-600">"port"</span>: <span class="text-amber-600">102</span>,</div>
+<div><span class="text-indigo-600">"mode"</span>: <span class="text-teal-600">"readonly"</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer class="py-12 border-t border-slate-200 bg-light-bg text-center text-xs text-slate-500 relative z-10">
+<div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+<span class="font-bold text-slate-900 tracking-wider">HEKTOR.VISION</span>
+<p>© 2026 HEKTOR. Todos os direitos reservados.</p>
+</div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+if (window.lucide) lucide.createIcons();
+
+// 1. Play Manual do YouTube (Elimina Erro 153)
+const videoPoster = document.getElementById('video-poster');
+const youtubeContainer = document.getElementById('youtube-container');
+const youtubeIframe = document.getElementById('youtube-iframe');
+
+videoPoster.addEventListener('click', () => {
+const videoSrc = youtubeIframe.getAttribute('data-src');
+youtubeIframe.setAttribute('src', videoSrc);
+videoPoster.style.display = 'none';
+youtubeContainer.classList.remove('hidden');
+});
+
+// 2. Efeito de digitação IA
+const aiTextElement = document.getElementById('ai-typing-text');
+const phrases = [
+"Conectando diretamente aos seus PLCs Siemens...",
+"Centralizando a telemetria da sua planta industrial...",
+"Sem atrito. Dados em tempo real direto na sua tela."
+ ];
+let phraseIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+let typingSpeed = 50;
+
+function typeAI() {
+const currentPhrase = phrases[phraseIndex];
+
+if (isDeleting) {
+aiTextElement.textContent = currentPhrase.substring(0, charIndex - 1);
+charIndex--;
+typingSpeed = 30;
+} else {
+aiTextElement.textContent = currentPhrase.substring(0, charIndex + 1);
+charIndex++;
+typingSpeed = 60;
+}
+
+if (!isDeleting && charIndex === currentPhrase.length) {
+isDeleting = true;
+typingSpeed = 2000;
+} else if (isDeleting && charIndex === 0) {
+isDeleting = false;
+phraseIndex = (phraseIndex + 1) % phrases.length;
+typingSpeed = 500;
+}
+
+setTimeout(typeAI, typingSpeed);
+}
+setTimeout(typeAI, 1000);
+
+// 3. Binário Discreto ao Redor do Cursor
+const toggleBtn = document.getElementById('toggle-binary');
+const canvas = document.getElementById('binary-canvas');
+const ctx = canvas.getContext('2d');
+let animationFrameId;
+let isActive = false;
+
+let mouseX = -1000;
+let mouseY = -1000;
+
+window.addEventListener('mousemove', (e) => {
+mouseX = e.clientX;
+mouseY = e.clientY;
+});
+
+function resizeCanvas() {
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+const fontSize = 14;
+const columnWidth = 26;
+let columns = Math.floor(canvas.width / columnWidth);
+let drops = Array(columns).fill(0).map(() => Math.floor(Math.random() * -50));
+let speeds = Array(columns).fill(0).map(() => Math.random() * 1.5 + 1.2);
+
+function drawBinaryMatrix() {
+ctx.fillStyle = 'rgba(248, 250, 252, 0.25)';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+ctx.font = 400 ${fontSize}px 'JetBrains Mono', monospace`;
+
+for (let i = 0; i < drops.length; i++) {
+const text = Math.random() > 0.5 ? '1' : '0';
+let x = i * columnWidth;
+let y = drops[i] * fontSize;
+
+let dx = x - mouseX;
+let dy = y - mouseY;
+let dist = Math.sqrt(dx * dx + dy * dy);
+
+if (dist < 180) {
+let alpha = 1 - (dist / 180);
+ctx.fillStyle = rgba(13, 148, 136,${alpha * 0.25})`;
+ctx.fillText(text, x, y);
+}
+
+if (y > canvas.height && Math.random() > 0.97) {
+drops[i] = 0;
+speeds[i] = Math.random() * 1.5 + 1.2;
+}
+drops[i] += speeds[i] * 0.35;
+}
+animationFrameId = requestAnimationFrame(drawBinaryMatrix);
+}
+
+toggleBtn.addEventListener('click', () => {
+isActive = !isActive;
+if (isActive) {
+canvas.classList.add('active');
+toggleBtn.innerHTML = <i data-lucide="rotate-ccw" class="w-4 h-4"&gt;&lt;/i&gt;&lt;span&gt;Desativar Binário&lt;/span>;
+if (window.lucide) lucide.createIcons();
+drawBinaryMatrix();
+} else {
+canvas.classList.remove('active');
+toggleBtn.innerHTML = <i data-lucide="binary" class="w-4 h-4"&gt;&lt;/i&gt;&lt;span&gt;Antigravity Binário 🚀&lt;/span>;
+if (window.lucide) lucide.createIcons();
+cancelAnimationFrame(animationFrameId);
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+});
+});
+</script>
+</body>
+</html>
